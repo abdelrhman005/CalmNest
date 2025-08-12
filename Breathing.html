@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<link rel="icon" type="image/png" href="pic/logo2bg.png">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Breathing Exercise - CalmNest</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #f7fcfb;
+    color: #0f172a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+.circle {
+  margin: 30px 0;
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, #4a90e2, #50e3c2);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  font-size: 28px;
+  transition: width 1s ease, height 1s ease, transform 1s ease;
+}
+.circle.big {
+  width: 230px;
+  height: 230px;
+}
+
+  .phase-text {
+    font-size: 20px;
+    height: 30px;
+    margin-bottom: 20px;
+  }
+  .phase-text2 {
+    font-size: 17px;
+    height: 30px;
+    margin-bottom: 10px;
+  }
+  button {
+    padding: 10px 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(-35deg, #4a90e2, #50e3c2);
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+	transition: .3s ease;
+  }
+  button:hover {
+    scale: 1.1;
+  }
+</style>
+</head>
+<body>
+
+<h1>CalmNest - Breathing Exercise</h1>
+
+<div class="circle" id="breathCircle"></div>
+<div class="phase-text" id="phaseText">Press start to begin 🩵</div>
+<div class="phase-text2" id="phaseText">remember we Love You 🩵</div>
+<div>
+  <button id="startBtn">Start</button>
+  <button id="pauseBtn">Pause</button>
+</div>
+
+<script>
+  const circle = document.getElementById('breathCircle');
+  const phaseText = document.getElementById('phaseText');
+  const startBtn = document.getElementById('startBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+
+  let timer = null;
+  let running = false;
+  let seqIndex = 0;
+
+  const sequence = [
+    { name: 'Inhale', duration: 6, action: 'in' },
+    { name: 'Exhale', duration: 6, action: 'out' },
+  ];
+
+  function applyCircle(action) {
+    if (action === 'in') {
+      circle.classList.add('big');
+      circle.style.transform = 'scale(1)';
+    } else if (action === 'out') {
+      circle.classList.remove('big');
+      circle.style.transform = 'scale(1)';
+    }
+  }
+
+  function updatePhaseText(text) {
+    phaseText.textContent = text;
+  }
+
+  function runSequence() {
+    if (!running) return;
+    if (seqIndex >= sequence.length) seqIndex = 0;
+    const step = sequence[seqIndex];
+    let timeLeft = step.duration;
+    updatePhaseText(`${step.name} — ${timeLeft} seconds`);
+    applyCircle(step.action);
+
+    timer = setInterval(() => {
+      timeLeft--;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        seqIndex++;
+        runSequence();
+      } else {
+        updatePhaseText(`${step.name} — ${timeLeft} seconds`);
+      }
+    }, 1000);
+  }
+
+  startBtn.addEventListener('click', () => {
+    if (running) return;
+    running = true;
+    runSequence();
+  });
+
+  pauseBtn.addEventListener('click', () => {
+    running = false;
+    clearInterval(timer);
+    updatePhaseText('');
+    circle.classList.remove('big');
+    circle.style.transform = 'scale(1)';
+  });
+</script>
+
+</body>
+</html>

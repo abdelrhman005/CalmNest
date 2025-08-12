@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="syle.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+	<title>CalmNest</title>
+	<link rel="icon" type="image/png" href="pic/logo2bg.png">
+</head>
+<body>
+	<div class="chat-circle" onclick="toggleChat()">
+		<i class="fa-solid fa-robot"></i>
+	</div>
+
+	<section class="chat-container hidden">
+		<div class="bot-chat">
+			<div class="messages" id="messages"></div>
+			<div class="input-area">
+				<input type="text" id="userInput" placeholder="write ur problem" autocomplete="off" />
+				<button id="sendBtn">send</button>
+			</div>
+		</div>
+	</section>
+
+	<header>
+		<a href="#"><img src="pic/the_big_logo.png" alt="CalmNest Logo" class="logo"></a>
+		<nav>
+			<a href="#Breathing">Breathing</a>
+			<a href="#check-section">Mood Checker</a>
+			<a href="#CalmTips">stay Calm</a>
+			<a href="#footer">Contact</a>
+		</nav>
+	</header>
+
+	<section class="hero">
+		<div class="p">
+			<h2>
+				<span class="talk">Talk.</span>
+				<span class="track"> Track.</span>
+				<span class="heal"> Heal.</span>
+			</h2>
+			<p>Take a moment for yourself. Our platform helps you understand your emotion.</p>
+			<a onclick="$crisp.push(['do', 'chat:open'])" class="btn">chat with our team</a>
+		</div>
+		<div class="hero-pic">
+			<img src="pic/Peace of mind-bro.svg" alt="Peace of mind illustration">
+		</div>
+	</section>
+
+	<section class="breathing-section" id="breathing">
+    <div class="breathing-container">
+        <div class="breathing-image">
+            <img src="pic/Breathing exercise-amico.svg" alt="Breathing Exercise">
+        </div>
+        <div class="breathing-text">
+            <h2>Breathing Exercise</h2>
+            <p>
+                Take a moment to slow down. Inhale deeply, exhale slowly, and feel the calm 
+                flow through your body. Follow our guided breathing exercise to relax your mind.
+            </p>
+            <a href="breathing.html" class="breathing-btn">Start Breathing</a>
+        </div>
+    </div>
+</section>
+
+
+<section class="cards-container" id="CalmTips">
+    <h2 class="title">Stay Calm</h2>
+    <div class="content">
+        <div class="Courses-card">
+            <div class="icon"><i class="fa-solid fa-wind"></i></div>
+            <h1>Breathe Deeply</h1>
+            <p>Take a long, slow inhale, then gently exhale to release tension and clear your mind.</p>
+        </div>
+
+        <div class="Courses-card">
+            <div class="icon"><i class="fa-solid fa-glass-water"></i></div>
+            <h1>Stay Hydrated</h1>
+            <p>Drinking enough water keeps your body refreshed and helps reduce stress.</p>
+        </div>
+
+        <div class="Courses-card">
+            <div class="icon"><i class="fa-solid fa-seedling"></i></div>
+            <h1>Take a Short Break</h1>
+            <p>Close your eyes for a minute and let your mind reset.</p>
+        </div>
+
+        <div class="Courses-card">
+            <div class="icon"><i class="fa-solid fa-headphones"></i></div>
+            <h1>Listen to Nature</h1>
+            <p>Calming sounds like waves, birds, or rain can soothe your thoughts.</p>
+        </div>
+
+        <div class="Courses-card">
+            <div class="icon"><i class="fa-solid fa-pen"></i></div>
+            <h1>Write It Down</h1>
+            <p>Putting your worries on paper helps free your mind from them.</p>
+        </div>
+
+        <div class="Courses-card">
+            <div class="icon"><i class="fa-solid fa-walkie-talkie"></i></div>
+            <h1>Move a Little</h1>
+            <p>Stretch or take a short walk to refresh both body and mind.</p>
+        </div>
+    </div>
+</section>
+
+	
+
+<section class="check-section" id="check-section">
+<div class="mood-checker">
+    <h2>How are you feeling today?</h2>
+    <div class="moods">
+		<button data-mood="excited">🤩</button>
+        <button data-mood="happy">😊</button>
+		<button data-mood="calm">😌</button>
+        <button data-mood="sad">😔</button>
+		<button data-mood="stressed">😫</button>
+    </div>
+    <p id="moodMessage" style="margin-top:10px; font-size:1.1em; font-weight:500; color:#555;"></p>
+    <button id="toggleCalendar">Show Calendar</button>
+</div>
+
+<div id="calendarContainer" style="display:none;">
+    <h2>Your Mood Calendar</h2>
+    <div id="calendar" class="calendar"></div>
+</div>
+ <audio id="calmAudio" loop>
+    <source src="pic/1-rain-sounds-387696.mp3" type="audio/mpeg" />
+  </audio>
+
+<script>
+  const calmAudio = document.getElementById('calmAudio');
+
+  function playAudio() {
+    calmAudio.play().catch(() => {});
+    // نحذف الحدث عشان ما يتكرر
+    window.removeEventListener('click', playAudio);
+    window.removeEventListener('scroll', playAudio);
+  }
+
+  window.addEventListener('click', playAudio);
+  window.addEventListener('scroll', playAudio);
+</script>
+
+<script>
+const moods = {
+    happy: "😊",
+    sad: "😔",
+    stressed: "😫",
+    excited: "🤩",
+    calm: "😌"
+};
+
+const moodMessages = {
+    happy: "Glad to see you're happy! Keep smiling 🌟",
+    sad: "It's okay to feel sad sometimes 💙 Take care of yourself.",
+    stressed: "Remember to take deep breaths and relax 🫶",
+    excited: "Yay! Your excitement is contagious 🚀",
+    calm: "Peaceful vibes are the best 🌿"
+};
+
+const today = new Date().toISOString().split('T')[0];
+let moodData = JSON.parse(localStorage.getItem("moods")) || [];
+
+function saveMood(mood) {
+    const exists = moodData.find(m => m.date === today);
+    if (!exists) {
+        moodData.push({ date: today, mood: mood });
+    } else {
+        exists.mood = mood;
+    }
+    localStorage.setItem("moods", JSON.stringify(moodData));
+    renderCalendar();
+    document.getElementById("moodMessage").textContent = moodMessages[mood];
+}
+
+document.querySelectorAll(".moods button").forEach(btn => {
+    btn.addEventListener("click", () => {
+        saveMood(btn.dataset.mood);
+    });
+});
+
+function renderCalendar() {
+    const calendar = document.getElementById("calendar");
+    calendar.innerHTML = "";
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const dayMood = moodData.find(m => m.date === dateStr);
+        const cell = document.createElement("div");
+        cell.className = "day";
+        cell.innerHTML = `<strong>${day}</strong><br>${dayMood ? moods[dayMood.mood] : ""}`;
+        calendar.appendChild(cell);
+    }
+}
+
+document.getElementById("toggleCalendar").addEventListener("click", () => {
+    const container = document.getElementById("calendarContainer");
+    if (container.style.display === "none") {
+        container.style.display = "block";
+        renderCalendar();
+        document.getElementById("toggleCalendar").textContent = "Hide Calendar";
+    } else {
+        container.style.display = "none";
+        document.getElementById("toggleCalendar").textContent = "Show Calendar";
+    }
+});
+</script>
+</section>
+
+
+<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="671c93dd-102c-40a3-b65e-90c9fa741bd2";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+
+	<script src="test.js"></script>
+	<footer class="footer" id="footer">
+		<p class="footer-title">copyrights @ <span>Abdelrhman Mandoh</span></p>
+		<p class="demo">lets talk on: abdelrhmanmamdoh57@gmail.com </p>
+	</footer>
+</body>
+</html>
